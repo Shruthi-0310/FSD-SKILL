@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Lists</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #1a1814;
+      --paper:  #f7f4ee;
+      --stone:  #9c9690;
+      --accent: #c0622f;
+      --rule:   #dedad3;
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    article {
+      max-width: 620px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 40px;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 32px;
+    }
+
+    h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+
+    hr { border: none; border-top: 1px solid var(--rule); margin-bottom: 32px; }
+
+    /* Section headings */
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 2px 7px;
+      margin-bottom: 14px;
+    }
+
+    /* Unordered list */
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #3e3b37;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    ul li::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Ordered list */
+    ol {
+      list-style: none;
+      padding: 0;
+      counter-reset: steps;
+    }
+
+    ol li {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #3e3b37;
+      padding: 10px 0 10px 48px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      counter-increment: steps;
+    }
+
+    ol li::before {
+      content: counter(steps, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 10px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+
+    .meta {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--stone);
+      display: flex;
+      gap: 24px;
+    }
+  </style>
+</head>
+<body>
+  <article>
+
+    <p class="eyebrow">HTML Lists</p>
+    <h1>Ordered <em>&amp;</em> Unordered</h1>
+    <hr>
+
+    <!-- UNORDERED LIST -->
+    <div class="section">
+      <span class="tag">&lt;ul&gt; — Unordered List</span>
+      <h2>Things every webpage needs</h2>
+      <ul>
+        <li>A clear, descriptive title</li>
+        <li>Readable typography and spacing</li>
+        <li>Meaningful, semantic HTML structure</li>
+        <li>Images with descriptive alt text</li>
+        <li>Links that tell you where they lead</li>
+      </ul>
+    </div>
+
+    <!-- ORDERED LIST -->
+    <div class="section">
+      <span class="tag">&lt;ol&gt; — Ordered List</span>
+      <h2>How to build your first webpage</h2>
+      <ol>
+        <li>Create a new file and save it as <code>index.html</code></li>
+        <li>Add the <code>&lt;!DOCTYPE html&gt;</code> declaration at the top</li>
+        <li>Write your content inside <code>&lt;body&gt;</code> tags</li>
+        <li>Add styles using CSS in the <code>&lt;head&gt;</code></li>
+        <li>Open the file in a browser to see the result</li>
+      </ol>
+    </div>
+
+    <div class="meta">
+      <span>HTML · CSS</span>
+      <span>June 2026</span>
+    </div>
+
+  </article>
+</body>
+</html>
