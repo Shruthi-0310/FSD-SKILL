@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #1a1814;
+      --paper:   #f7f4ee;
+      --stone:   #9c9690;
+      --accent:  #c0622f;
+      --rule:    #dedad3;
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    article {
+      max-width: 620px;
+      width: 100%;
+    }
+
+    /* Eyebrow label */
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 40px;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* Heading */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 32px;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin-bottom: 28px;
+    }
+
+    /* Body copy */
+    p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #3e3b37;
+      font-weight: 300;
+    }
+
+    /* Pull quote — the signature element */
+    blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 36px 0;
+      padding: 4px 0 4px 24px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    /* Footer meta */
+    .meta {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--stone);
+      display: flex;
+      gap: 24px;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    <p class="eyebrow">Introduction</p>
+
+    <h1>The craft of a <em>well-built</em> webpage</h1>
+
+    <hr>
+
+    <p>
+      HTML is the quiet skeleton beneath every page on the web — invisible when done right,
+      unmistakable when done wrong. It gives structure to ideas, hierarchy to information,
+      and meaning to the words that fill a screen.
+    </p>
+
+    <blockquote>
+      Good design is as little design as possible — but never less than what the content demands.
+    </blockquote>
+
+    <p>
+      A heading announces intent. A paragraph develops it. Together, they form the smallest
+      complete unit of written thought on the web — simple in form, limitless in expression.
+    </p>
+
+    <div class="meta">
+      <span>HTML · CSS</span>
+      <span>June 2026</span>
+    </div>
+  </article>
+</body>
+</html>
