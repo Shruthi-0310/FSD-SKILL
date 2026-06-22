@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internal CSS</title>
+
+  <!-- INTERNAL CSS — lives inside <style> in the <head> -->
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Background color set here via internal CSS */
+    body {
+      background-color: #fdf6ec;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+
+    .page {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #b07d4a;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 600;
+      line-height: 1.1;
+      color: #2c1f0e;
+      margin-bottom: 28px;
+    }
+
+    h1 i {
+      font-style: italic;
+      font-weight: 400;
+      color: #b07d4a;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e8d9c4;
+      margin-bottom: 28px;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: #5a4232;
+      margin-bottom: 20px;
+    }
+
+    .code-block {
+      background: #fef9f3;
+      border: 1px solid #e8d9c4;
+      border-left: 3px solid #b07d4a;
+      border-radius: 0 6px 6px 0;
+      padding: 20px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: #5a4232;
+      margin: 28px 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .code-block .tag   { color: #b07d4a; }
+    .code-block .prop  { color: #7a5c9a; }
+    .code-block .value { color: #3a7a5a; }
+
+    .meta {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid #e8d9c4;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: #b07d4a;
+      display: flex;
+      justify-content: space-between;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <p class="eyebrow">Internal CSS · &lt;style&gt; in &lt;head&gt;</p>
+
+    <h1>Background in <i>warm cream</i></h1>
+
+    <hr>
+
+    <p>
+      Internal CSS is written inside a <code>&lt;style&gt;</code> tag placed in the
+      <code>&lt;head&gt;</code> of the HTML document. The warm cream background
+      on this page is set entirely through internal CSS.
+    </p>
+
+    <div class="code-block"><span class="tag">&lt;style&gt;</span>
+
+  <span class="tag">body</span> {
+    <span class="prop">background-color</span>: <span class="value">#fdf6ec</span>;
+    <span class="prop">font-family</span>:       <span class="value">'Jost', sans-serif</span>;
+    <span class="prop">min-height</span>:        <span class="value">100vh</span>;
+  }
+
+<span class="tag">&lt;/style&gt;</span></div>
+
+    <p>
+      No external file needed — the styles travel with the page, making it
+      self-contained and easy to share as a single document.
+    </p>
+
+    <div class="meta">
+      <span>HTML · Internal CSS</span>
+      <span>June 2026</span>
+    </div>
+
+  </div>
+
+</body>
+</html>
