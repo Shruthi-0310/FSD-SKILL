@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Table</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f0f13;
+      --surface: #17171e;
+      --border:  #2a2a35;
+      --text:    #e8e6f0;
+      --muted:   #6b6880;
+      --accent:  #7c6af7;
+      --green:   #3dd68c;
+      --red:     #f7506a;
+      --yellow:  #f7c948;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    article {
+      max-width: 740px;
+      width: 100%;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .topbar h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .topbar .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* Table wrapper */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    /* Header */
+    thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    thead th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    thead th:last-child { text-align: right; }
+
+    /* Body */
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody tr:hover { background: #1f1f28; }
+
+    tbody td {
+      padding: 15px 20px;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    tbody td:last-child {
+      text-align: right;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+
+    /* Avatar placeholder */
+    .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-right: 10px;
+      vertical-align: middle;
+      border: 1px solid var(--accent);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .badge.pass   { background: rgba(61,214,140,0.12); color: var(--green); border: 1px solid rgba(61,214,140,0.3); }
+    .badge.fail   { background: rgba(247,80,106,0.12); color: var(--red);   border: 1px solid rgba(247,80,106,0.3); }
+    .badge.avg    { background: rgba(247,201,72,0.12); color: var(--yellow);border: 1px solid rgba(247,201,72,0.3); }
+
+    /* Footer */
+    tfoot tr {
+      background: #1a1a22;
+      border-top: 1px solid var(--border);
+    }
+
+    tfoot td {
+      padding: 13px 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    tfoot td:last-child {
+      text-align: right;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    /* Bottom meta */
+    .meta {
+      margin-top: 20px;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <article>
+
+    <div class="topbar">
+      <h1><span class="dot"></span>Student Results</h1>
+      <span class="pill">June 2026</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="avatar">AS</span>Aanya Sharma</td>
+            <td>Mathematics</td>
+            <td>A</td>
+            <td><span class="badge pass">Pass</span></td>
+            <td>94</td>
+          </tr>
+          <tr>
+            <td><span class="avatar">RM</span>Rohan Mehta</td>
+            <td>Physics</td>
+            <td>B</td>
+            <td><span class="badge pass">Pass</span></td>
+            <td>81</td>
+          </tr>
+          <tr>
+            <td><span class="avatar">PN</span>Priya Nair</td>
+            <td>Chemistry</td>
+            <td>C</td>
+            <td><span class="badge avg">Average</span></td>
+            <td>67</td>
+          </tr>
+          <tr>
+            <td><span class="avatar">KP</span>Karan Patel</td>
+            <td>Biology</td>
+            <td>A</td>
+            <td><span class="badge pass">Pass</span></td>
+            <td>91</td>
+          </tr>
+          <tr>
+            <td><span class="avatar">SI</span>Sneha Iyer</td>
+            <td>English</td>
+            <td>D</td>
+            <td><span class="badge fail">Fail</span></td>
+            <td>42</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4">Class Average</td>
+            <td>75</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="meta">
+      <span>HTML · CSS</span>
+      <span>5 students · End-of-term</span>
+    </div>
+
+  </article>
+</body>
+</html>
