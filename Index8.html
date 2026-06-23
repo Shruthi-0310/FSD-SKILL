@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Alert Example</title>
+</head>
+<body>
+
+    <h2>Click the button below:</h2>
+    
+    <button id="myButton">Click Me</button>
+
+    <script>
+        // Select the button by its ID
+        const button = document.getElementById('myButton');
+
+        // Listen for a click event on the button
+        button.addEventListener('click', function() {
+            // Trigger the alert message
+            alert('Button was clicked successfully!');
+        });
+    </script>
+
+</body>
+</html>
