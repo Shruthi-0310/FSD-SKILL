@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Event Listener Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:        #F7F8FA;
+      --surface:   #FFFFFF;
+      --border:    #E2E5EA;
+      --text-primary:   #1A1D23;
+      --text-secondary: #5A6278;
+      --text-muted:     #9CA3AF;
+      --blue:      #1D5FCC;
+      --blue-light: #EBF2FF;
+      --blue-hover: #1750B0;
+      --green:     #0F6E56;
+      --green-light: #E1F5EE;
+      --mono:      'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top bar ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg { display: block; }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: var(--blue-light);
+      color: var(--blue);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Main layout ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* ── Page title ── */
+    .page-title {
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .page-title h1 {
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .page-title p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 560px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--blue-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon svg { display: block; }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* ── Demo area ── */
+    .demo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s, box-shadow 0.14s;
+      outline: none;
+      text-decoration: none;
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px rgba(29, 95, 204, 0.25);
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+    .btn-primary:hover { background: var(--blue-hover); border-color: var(--blue-hover); }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover { background: var(--bg); }
+
+    .btn-danger {
+      background: #fff;
+      color: #B91C1C;
+      border-color: #FECACA;
+    }
+    .btn-danger:hover { background: #FEF2F2; }
+
+    /* ── Output box ── */
+    .output-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 13px;
+      color: var(--text-secondary);
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .output-box.active {
+      background: var(--green-light);
+      border-color: #5DCAA5;
+      color: var(--green);
+    }
+
+    .output-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .output-box.active .output-dot { background: var(--green); }
+
+    /* ── Counter ── */
+    .counter-display {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 1.25rem;
+    }
+
+    .counter-number {
+      font-size: 48px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-primary);
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .counter-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .counter-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ── Event log ── */
+    .log-wrap {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .log-head {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .log-clear {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0;
+      transition: color 0.12s;
+    }
+
+    .log-clear:hover { color: var(--blue); }
+
+    .log-body {
+      min-height: 80px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .log-entry {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .log-entry:last-child { border-bottom: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .log-time { color: var(--text-muted); flex-shrink: 0; }
+    .log-event { color: var(--blue); flex-shrink: 0; }
+    .log-detail { color: var(--text-primary); }
+
+    .log-empty {
+      padding: 20px 14px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    /* ── Code block ── */
+    .code-block {
+      background: #1E2333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .code-bar {
+      background: #252A3A;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .code-lang {
+      font-size: 11px;
+      font-weight: 500;
+      color: #6B7280;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+
+    .code-copy {
+      font-size: 11px;
+      font-weight: 500;
+      color: #6B7280;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.12s;
+      padding: 0;
+    }
+
+    .code-copy:hover { color: #9CA3AF; }
+
+    pre {
+      margin: 0;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.75;
+      color: #E5E7EB;
+    }
+
+    .token-keyword  { color: #C084FC; }
+    .token-string   { color: #86EFAC; }
+    .token-fn       { color: #7DD3FC; }
+    .token-comment  { color: #6B7280; font-style: italic; }
+    .token-param    { color: #FCD34D; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      main { padding: 2rem 1rem; }
+      .page-title h1 { font-size: 22px; }
+      .counter-number { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a class="logo" href="#">
+      <span class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </span>
+      JS Event Listener Demo
+    </a>
+    <span class="badge">JavaScript</span>
+  </header>
+
+  <!-- Main -->
+  <main>
+
+    <div class="page-title">
+      <p class="eyebrow">JavaScript Fundamentals</p>
+      <h1>addEventListener( )</h1>
+      <p>Learn how JavaScript event listeners respond to user actions. Each example below is live — click the buttons and watch the event log update in real time.</p>
+    </div>
+
+    <!-- Example 1: Simple click -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="4" width="12" height="8" rx="2" stroke="#1D5FCC" stroke-width="1.4"/>
+              <path d="M6 8h4" stroke="#1D5FCC" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="card-title">Example 1 — Basic click listener</div>
+            <div class="card-subtitle">button.addEventListener('click', callback)</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="demo-area">
+          <button class="btn btn-primary" id="btn1">Click me</button>
+        </div>
+        <div class="output-box" id="out1">
+          <span class="output-dot"></span>
+          <span id="out1-text">Waiting for a click event…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Example 2: Counter -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="5.5" stroke="#1D5FCC" stroke-width="1.4"/>
+              <path d="M8 5.5V8l1.5 1.5" stroke="#1D5FCC" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="card-title">Example 2 — Multiple listeners on multiple buttons</div>
+            <div class="card-subtitle">Increment, decrement, and reset each fire separate events</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="counter-display">
+          <span class="counter-number" id="counterDisplay">0</span>
+          <span class="counter-label">clicks</span>
+        </div>
+        <div class="counter-controls">
+          <button class="btn btn-primary" id="btnIncrement">+ Increment</button>
+          <button class="btn btn-secondary" id="btnDecrement">− Decrement</button>
+          <button class="btn btn-danger" id="btnReset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event log -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 4h10M3 8h7M3 12h5" stroke="#1D5FCC" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="card-title">Event log</div>
+            <div class="card-subtitle">Every button click is recorded here</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div class="log-wrap" style="border: none; border-radius: 0;">
+          <div class="log-head">
+            Live output
+            <button class="log-clear" id="clearLog">Clear</button>
+          </div>
+          <div class="log-body" id="logBody">
+            <p class="log-empty" id="logEmpty">// No events fired yet — click any button above</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code reference -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M5 5L2 8l3 3M11 5l3 3-3 3M9 3l-2 10" stroke="#1D5FCC" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="card-title">Source code</div>
+            <div class="card-subtitle">The event listeners powering this page</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div class="code-block" style="border-radius: 0 0 11px 11px;">
+          <div class="code-bar">
+            <span class="code-lang">JavaScript</span>
+            <button class="code-copy" id="copyBtn">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="4.5" y="1" width="7.5" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="1" y="3.5" width="7.5" height="9" rx="1.5" fill="#1E2333" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              Copy
+            </button>
+          </div>
+          <pre><code id="codeSnippet"><span class="token-comment">// ── Example 1: Basic click listener ──────────────────</span>
+<span class="token-keyword">const</span> btn1 = document.<span class="token-fn">getElementById</span>(<span class="token-string">'btn1'</span>);
+
+btn1.<span class="token-fn">addEventListener</span>(<span class="token-string">'click'</span>, <span class="token-keyword">function</span>() {
+  console.<span class="token-fn">log</span>(<span class="token-string">'Button was clicked!'</span>);
+});
+
+<span class="token-comment">// ── Example 2: Counter with multiple buttons ──────────</span>
+<span class="token-keyword">let</span> count = <span class="token-param">0</span>;
+
+<span class="token-keyword">const</span> btnIncrement = document.<span class="token-fn">getElementById</span>(<span class="token-string">'btnIncrement'</span>);
+<span class="token-keyword">const</span> btnDecrement = document.<span class="token-fn">getElementById</span>(<span class="token-string">'btnDecrement'</span>);
+<span class="token-keyword">const</span> btnReset     = document.<span class="token-fn">getElementById</span>(<span class="token-string">'btnReset'</span>);
+
+btnIncrement.<span class="token-fn">addEventListener</span>(<span class="token-string">'click'</span>, () =&gt; {
+  count++;
+  <span class="token-fn">updateCounter</span>();
+});
+
+btnDecrement.<span class="token-fn">addEventListener</span>(<span class="token-string">'click'</span>, () =&gt; {
+  count--;
+  <span class="token-fn">updateCounter</span>();
+});
+
+btnReset.<span class="token-fn">addEventListener</span>(<span class="token-string">'click'</span>, () =&gt; {
+  count = <span class="token-param">0</span>;
+  <span class="token-fn">updateCounter</span>();
+});</code></pre>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    JavaScript Event Listener Demo &nbsp;·&nbsp; <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank">MDN Reference</a>
+  </footer>
+
+  <!-- ── JavaScript ── -->
+  <script>
+    function timestamp() {
+      return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    let logCount = 0;
+
+    function addLog(event, detail) {
+      const empty = document.getElementById('logEmpty');
+      if (empty) empty.remove();
+
+      const body = document.getElementById('logBody');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.innerHTML =
+        '<span class="log-time">' + timestamp() + '</span>' +
+        '<span class="log-event">' + event + '</span>' +
+        '<span class="log-detail">— ' + detail + '</span>';
+      body.insertBefore(entry, body.firstChild);
+
+      logCount++;
+      const entries = body.querySelectorAll('.log-entry');
+      if (entries.length > 12) entries[entries.length - 1].remove();
+    }
+
+    // ── Example 1: Basic click ──────────────────────────────
+    var btn1Clicks = 0;
+    document.getElementById('btn1').addEventListener('click', function () {
+      btn1Clicks++;
+      const out = document.getElementById('out1');
+      const text = document.getElementById('out1-text');
+      out.classList.add('active');
+      text.textContent = 'Button clicked! Total clicks on this button: ' + btn1Clicks;
+      addLog('click', '#btn1 fired — click #' + btn1Clicks);
+    });
+
+    // ── Example 2: Counter ──────────────────────────────────
+    var count = 0;
+
+    function updateCounter() {
+      const el = document.getElementById('counterDisplay');
+      el.textContent = count;
+      el.style.color = count > 0 ? '#1D5FCC' : count < 0 ? '#B91C1C' : '#1A1D23';
+    }
+
+    document.getElementById('btnIncrement').addEventListener('click', function () {
+      count++;
+      updateCounter();
+      addLog('click', 'btnIncrement → count is now ' + count);
+    });
+
+    document.getElementById('btnDecrement').addEventListener('click', function () {
+      count--;
+      updateCounter();
+      addLog('click', 'btnDecrement → count is now ' + count);
+    });
+
+    document.getElementById('btnReset').addEventListener('click', function () {
+      count = 0;
+      updateCounter();
+      addLog('click', 'btnReset → counter reset to 0');
+    });
+
+    // ── Clear log ───────────────────────────────────────────
+    document.getElementById('clearLog').addEventListener('click', function () {
+      const body = document.getElementById('logBody');
+      body.innerHTML = '<p class="log-empty" id="logEmpty">// No events fired yet — click any button above</p>';
+    });
+
+    // ── Copy code ───────────────────────────────────────────
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      const raw = `// ── Example 1: Basic click listener ──────────────────
+const btn1 = document.getElementById('btn1');
+
+btn1.addEventListener('click', function() {
+  console.log('Button was clicked!');
+});
+
+// ── Example 2: Counter with multiple buttons ──────────
+let count = 0;
+
+const btnIncrement = document.getElementById('btnIncrement');
+const btnDecrement = document.getElementById('btnDecrement');
+const btnReset     = document.getElementById('btnReset');
+
+btnIncrement.addEventListener('click', () => {
+  count++;
+  updateCounter();
+});
+
+btnDecrement.addEventListener('click', () => {
+  count--;
+  updateCounter();
+});
+
+btnReset.addEventListener('click', () => {
+  count = 0;
+  updateCounter();
+});`;
+
+      navigator.clipboard.writeText(raw).then(function () {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(function () {
+          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="4.5" y="1" width="7.5" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="3.5" width="7.5" height="9" rx="1.5" fill="#1E2333" stroke="currentColor" stroke-width="1.2"/></svg> Copy';
+        }, 2000);
+      });
+    });
+  </script>
+
+</body>
+</html>
