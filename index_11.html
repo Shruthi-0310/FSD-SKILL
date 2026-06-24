@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Input Validation Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:             #F7F8FA;
+      --surface:        #FFFFFF;
+      --border:         #E2E5EA;
+      --text-primary:   #1A1D23;
+      --text-secondary: #5A6278;
+      --text-muted:     #9CA3AF;
+      --blue:           #1D5FCC;
+      --blue-light:     #EBF2FF;
+      --blue-hover:     #1750B0;
+      --green:          #0F6E56;
+      --green-light:    #E1F5EE;
+      --green-border:   #5DCAA5;
+      --red:            #B91C1C;
+      --red-light:      #FEF2F2;
+      --red-border:     #FECACA;
+      --mono:           'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .logo-icon {
+      width: 28px; height: 28px;
+      background: var(--blue);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .badge {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 8px; border-radius: 20px;
+      background: var(--blue-light); color: var(--blue);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .page-title { margin-bottom: 2.5rem; }
+
+    .eyebrow {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 8px;
+    }
+
+    .page-title h1 { font-size: 28px; font-weight: 600; line-height: 1.25; margin-bottom: 10px; }
+    .page-title p  { font-size: 15px; color: var(--text-secondary); line-height: 1.6; max-width: 560px; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .card-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .card-title    { font-size: 14px; font-weight: 600; }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+    .card-body     { padding: 1.5rem; }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 1.25rem; }
+
+    .form-label {
+      display: block;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .input-wrap { position: relative; }
+
+    .form-input {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 0 40px 0 12px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+
+    .form-input:focus {
+      border-color: var(--blue);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(29, 95, 204, 0.14);
+    }
+
+    .form-input.valid {
+      border-color: var(--green-border);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
+    }
+
+    .form-input.invalid {
+      border-color: var(--red-border);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.10);
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 15px; pointer-events: none;
+      opacity: 0; transition: opacity 0.15s;
+    }
+
+    .input-icon.show { opacity: 1; }
+
+    .hint {
+      font-size: 12px;
+      margin-top: 5px;
+      min-height: 16px;
+      color: var(--text-muted);
+      transition: color 0.15s;
+    }
+
+    .hint.error   { color: var(--red); }
+    .hint.success { color: var(--green); }
+
+    /* ── Rule chips ── */
+    .rules-title {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 10px;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .rule-chip {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500;
+      padding: 8px 12px; border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .rule-chip .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--text-muted); flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .rule-chip.pass {
+      background: var(--green-light);
+      border-color: var(--green-border);
+      color: var(--green);
+    }
+
+    .rule-chip.pass .dot { background: var(--green); }
+
+    .rule-chip.fail {
+      background: var(--red-light);
+      border-color: var(--red-border);
+      color: var(--red);
+    }
+
+    .rule-chip.fail .dot { background: var(--red); }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      width: 100%;
+      height: 42px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 600;
+      border: none; border-radius: 8px;
+      background: var(--blue); color: #fff;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s, opacity 0.15s;
+    }
+
+    .btn-submit:hover:not(:disabled) { background: var(--blue-hover); }
+    .btn-submit:active:not(:disabled) { transform: scale(0.99); }
+
+    .btn-submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── Success banner ── */
+    .success-banner {
+      display: none;
+      align-items: center; gap: 12px;
+      background: var(--green-light);
+      border: 1px solid var(--green-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px; color: var(--green);
+      margin-top: 1rem;
+    }
+
+    .success-banner.show { display: flex; }
+
+    /* ── Code block ── */
+    .code-block { background: #1E2333; border-radius: 0 0 11px 11px; }
+
+    .code-bar {
+      background: #252A3A;
+      padding: 8px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .code-lang {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+      text-transform: uppercase; color: #6B7280;
+      font-family: var(--mono);
+    }
+
+    .code-copy {
+      font-size: 11px; font-weight: 500; color: #6B7280;
+      background: none; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 5px;
+      transition: color 0.12s; padding: 0;
+    }
+
+    .code-copy:hover { color: #9CA3AF; }
+
+    pre  { margin: 0; padding: 1.25rem 1.5rem; overflow-x: auto; }
+    code { font-family: var(--mono); font-size: 12.5px; line-height: 1.8; color: #E5E7EB; }
+
+    .kw  { color: #C084FC; }
+    .str { color: #86EFAC; }
+    .fn  { color: #7DD3FC; }
+    .cm  { color: #6B7280; font-style: italic; }
+    .nm  { color: #FCD34D; }
+    .rx  { color: #FB923C; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      text-align: center;
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    footer a { color: var(--blue); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      main { padding: 2rem 1rem; }
+      .page-title h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 5h10M3 8h7M3 11h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </span>
+      JS Input Validation Demo
+    </div>
+    <span class="badge">JavaScript</span>
+  </header>
+
+  <!-- Main -->
+  <main>
+
+    <div class="page-title">
+      <p class="eyebrow">JavaScript Fundamentals</p>
+      <h1>Input Field Validation</h1>
+      <p>A live demonstration of validating text input fields using JavaScript. Each rule is checked in real time as you type — the form only submits when all rules pass.</p>
+    </div>
+
+    <!-- Live validation form -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="2" y="3" width="12" height="10" rx="2" stroke="#1D5FCC" stroke-width="1.4"/>
+            <path d="M5 8h6M5 11h3" stroke="#1D5FCC" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">Registration form</div>
+          <div class="card-subtitle">Validates on every keystroke using addEventListener('input', …)</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label" for="usernameInput">Username</label>
+          <div class="input-wrap">
+            <input class="form-input" type="text" id="usernameInput" placeholder="e.g. janesmith92" autocomplete="off" />
+            <span class="input-icon" id="usernameIcon"></span>
+          </div>
+          <p class="hint" id="usernameHint">3–16 characters, letters and numbers only</p>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="emailInput">Email address</label>
+          <div class="input-wrap">
+            <input class="form-input" type="text" id="emailInput" placeholder="e.g. jane@example.com" autocomplete="off" />
+            <span class="input-icon" id="emailIcon"></span>
+          </div>
+          <p class="hint" id="emailHint">Must be a valid email format</p>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="passwordInput">Password</label>
+          <div class="input-wrap">
+            <input class="form-input" type="password" id="passwordInput" placeholder="Create a strong password" autocomplete="off" />
+            <span class="input-icon" id="passwordIcon"></span>
+          </div>
+          <p class="hint" id="passwordHint">Min 8 chars · one uppercase · one number · one symbol</p>
+        </div>
+
+        <!-- Rule chips -->
+        <div style="margin-bottom: 1.5rem;">
+          <p class="rules-title">Validation rules</p>
+          <div class="rules-grid" id="rulesGrid">
+            <div class="rule-chip" id="rule-uname"><span class="dot"></span>Username valid</div>
+            <div class="rule-chip" id="rule-email"><span class="dot"></span>Email valid</div>
+            <div class="rule-chip" id="rule-len">  <span class="dot"></span>Min 8 characters</div>
+            <div class="rule-chip" id="rule-upper"><span class="dot"></span>Uppercase letter</div>
+            <div class="rule-chip" id="rule-num">  <span class="dot"></span>Contains number</div>
+            <div class="rule-chip" id="rule-sym">  <span class="dot"></span>Special character</div>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="submitBtn" disabled>Create account</button>
+
+        <div class="success-banner" id="successBanner">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="8" stroke="#0F6E56" stroke-width="1.5"/>
+            <path d="M5.5 9l2.5 2.5 4.5-5" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Account created successfully! All fields passed validation.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Source code -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M5 5L2 8l3 3M11 5l3 3-3 3M9 3l-2 10" stroke="#1D5FCC" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">Source code</div>
+          <div class="card-subtitle">The validation logic powering this page</div>
+        </div>
+      </div>
+      <div style="padding: 0;">
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-lang">JavaScript</span>
+            <button class="code-copy" id="copyBtn">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="4.5" y="1" width="7.5" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="1" y="3.5" width="7.5" height="9" rx="1.5" fill="#1E2333" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              Copy
+            </button>
+          </div>
+          <pre><code><span class="cm">// ── Helper: set field state ────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">setField</span>(inputEl, iconEl, hintEl, valid, msg) {
+  inputEl.className = <span class="str">'form-input '</span> + (valid ? <span class="str">'valid'</span> : <span class="str">'invalid'</span>);
+  iconEl.textContent = valid ? <span class="str">'✓'</span> : <span class="str">'✕'</span>;
+  iconEl.className   = <span class="str">'input-icon show'</span>;
+  iconEl.style.color = valid ? <span class="str">'#0F6E56'</span> : <span class="str">'#B91C1C'</span>;
+  hintEl.textContent = msg;
+  hintEl.className   = <span class="str">'hint '</span> + (valid ? <span class="str">'success'</span> : <span class="str">'error'</span>);
+}
+
+<span class="cm">// ── Username validation ─────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">validateUsername</span>(value) {
+  value = value.<span class="fn">trim</span>();
+  <span class="kw">if</span> (!value)           <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Username cannot be empty'</span> };
+  <span class="kw">if</span> (value.length < <span class="nm">3</span>)  <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'At least 3 characters required'</span> };
+  <span class="kw">if</span> (value.length > <span class="nm">16</span>) <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Maximum 16 characters allowed'</span> };
+  <span class="kw">if</span> (!<span class="rx">/^[a-zA-Z0-9]+$/</span>.<span class="fn">test</span>(value))
+                         <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Letters and numbers only'</span> };
+  <span class="kw">return</span> { ok: <span class="kw">true</span>, msg: <span class="str">'Looks good!'</span> };
+}
+
+<span class="cm">// ── Email validation ────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">validateEmail</span>(value) {
+  value = value.<span class="fn">trim</span>();
+  <span class="kw">if</span> (!value) <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Email cannot be empty'</span> };
+  <span class="kw">if</span> (!<span class="rx">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.<span class="fn">test</span>(value))
+              <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Enter a valid email address'</span> };
+  <span class="kw">return</span> { ok: <span class="kw">true</span>, msg: <span class="str">'Valid email!'</span> };
+}
+
+<span class="cm">// ── Password validation ─────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">validatePassword</span>(value) {
+  <span class="kw">if</span> (!value)              <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Password cannot be empty'</span> };
+  <span class="kw">if</span> (value.length < <span class="nm">8</span>)   <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'At least 8 characters required'</span> };
+  <span class="kw">if</span> (!<span class="rx">/[A-Z]/</span>.<span class="fn">test</span>(value)) <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Add at least one uppercase letter'</span> };
+  <span class="kw">if</span> (!<span class="rx">/[0-9]/</span>.<span class="fn">test</span>(value)) <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Add at least one number'</span> };
+  <span class="kw">if</span> (!<span class="rx">/[^A-Za-z0-9]/</span>.<span class="fn">test</span>(value))
+                           <span class="kw">return</span> { ok: <span class="kw">false</span>, msg: <span class="str">'Add at least one special character'</span> };
+  <span class="kw">return</span> { ok: <span class="kw">true</span>, msg: <span class="str">'Strong password!'</span> };
+}
+
+<span class="cm">// ── Wire up event listeners ─────────────────────────────</span>
+document.<span class="fn">getElementById</span>(<span class="str">'usernameInput'</span>)
+  .<span class="fn">addEventListener</span>(<span class="str">'input'</span>, <span class="kw">function</span>() {
+    <span class="kw">const</span> result = <span class="fn">validateUsername</span>(<span class="kw">this</span>.value);
+    <span class="fn">setField</span>(this, usernameIcon, usernameHint, result.ok, result.msg);
+    <span class="fn">checkAll</span>();
+  });
+
+document.<span class="fn">getElementById</span>(<span class="str">'submitBtn'</span>)
+  .<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+    <span class="cm">// Only fires when all validations pass</span>
+    successBanner.classList.<span class="fn">add</span>(<span class="str">'show'</span>);
+  });</code></pre>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    JavaScript Input Validation Demo &nbsp;·&nbsp;
+    <a href="https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation" target="_blank">MDN Reference</a>
+  </footer>
+
+  <!-- ── JavaScript ── -->
+  <script>
+    var states = { username: false, email: false, password: false };
+
+    function setField(inputEl, iconEl, hintEl, valid, msg) {
+      inputEl.className    = 'form-input ' + (valid ? 'valid' : 'invalid');
+      iconEl.textContent   = valid ? '✓' : '✕';
+      iconEl.className     = 'input-icon show';
+      iconEl.style.color   = valid ? '#0F6E56' : '#B91C1C';
+      hintEl.textContent   = msg;
+      hintEl.className     = 'hint ' + (valid ? 'success' : 'error');
+    }
+
+    function resetField(inputEl, iconEl, hintEl, defaultMsg) {
+      inputEl.className  = 'form-input';
+      iconEl.className   = 'input-icon';
+      hintEl.textContent = defaultMsg;
+      hintEl.className   = 'hint';
+    }
+
+    function setRule(id, state) {
+      var el = document.getElementById(id);
+      el.className = 'rule-chip' + (state === true ? ' pass' : state === false ? ' fail' : '');
+    }
+
+    function checkAll() {
+      var allValid = states.username && states.email && states.password;
+      document.getElementById('submitBtn').disabled = !allValid;
+    }
+
+    // ── Username ──────────────────────────────────────────
+    function validateUsername(v) {
+      v = v.trim();
+      if (!v)           return { ok: false, msg: 'Username cannot be empty' };
+      if (v.length < 3) return { ok: false, msg: 'At least 3 characters required' };
+      if (v.length > 16)return { ok: false, msg: 'Maximum 16 characters allowed' };
+      if (!/^[a-zA-Z0-9]+$/.test(v)) return { ok: false, msg: 'Letters and numbers only — no spaces or symbols' };
+      return { ok: true, msg: 'Username looks good!' };
+    }
+
+    document.getElementById('usernameInput').addEventListener('input', function() {
+      var v = this.value;
+      if (!v) {
+        resetField(this, document.getElementById('usernameIcon'), document.getElementById('usernameHint'), '3–16 characters, letters and numbers only');
+        states.username = false;
+        setRule('rule-uname', null);
+        checkAll(); return;
+      }
+      var r = validateUsername(v);
+      setField(this, document.getElementById('usernameIcon'), document.getElementById('usernameHint'), r.ok, r.msg);
+      states.username = r.ok;
+      setRule('rule-uname', r.ok);
+      checkAll();
+    });
+
+    // ── Email ─────────────────────────────────────────────
+    function validateEmail(v) {
+      v = v.trim();
+      if (!v) return { ok: false, msg: 'Email cannot be empty' };
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return { ok: false, msg: 'Enter a valid email address (e.g. name@domain.com)' };
+      return { ok: true, msg: 'Valid email address!' };
+    }
+
+    document.getElementById('emailInput').addEventListener('input', function() {
+      var v = this.value;
+      if (!v) {
+        resetField(this, document.getElementById('emailIcon'), document.getElementById('emailHint'), 'Must be a valid email format');
+        states.email = false;
+        setRule('rule-email', null);
+        checkAll(); return;
+      }
+      var r = validateEmail(v);
+      setField(this, document.getElementById('emailIcon'), document.getElementById('emailHint'), r.ok, r.msg);
+      states.email = r.ok;
+      setRule('rule-email', r.ok);
+      checkAll();
+    });
+
+    // ── Password ──────────────────────────────────────────
+    function validatePassword(v) {
+      if (!v)           return { ok: false, msg: 'Password cannot be empty', len: false, upper: false, num: false, sym: false };
+      var len   = v.length >= 8;
+      var upper = /[A-Z]/.test(v);
+      var num   = /[0-9]/.test(v);
+      var sym   = /[^A-Za-z0-9]/.test(v);
+      var msg = 'Strong password!';
+      if (!len)   msg = 'At least 8 characters required';
+      else if (!upper) msg = 'Add at least one uppercase letter';
+      else if (!num)   msg = 'Add at least one number';
+      else if (!sym)   msg = 'Add at least one special character (!@#$%…)';
+      return { ok: len && upper && num && sym, msg: msg, len: len, upper: upper, num: num, sym: sym };
+    }
+
+    document.getElementById('passwordInput').addEventListener('input', function() {
+      var v = this.value;
+      if (!v) {
+        resetField(this, document.getElementById('passwordIcon'), document.getElementById('passwordHint'), 'Min 8 chars · one uppercase · one number · one symbol');
+        states.password = false;
+        setRule('rule-len',   null);
+        setRule('rule-upper', null);
+        setRule('rule-num',   null);
+        setRule('rule-sym',   null);
+        checkAll(); return;
+      }
+      var r = validatePassword(v);
+      setField(this, document.getElementById('passwordIcon'), document.getElementById('passwordHint'), r.ok, r.msg);
+      states.password = r.ok;
+      setRule('rule-len',   r.len);
+      setRule('rule-upper', r.upper);
+      setRule('rule-num',   r.num);
+      setRule('rule-sym',   r.sym);
+      checkAll();
+    });
+
+    // ── Submit ────────────────────────────────────────────
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      var banner = document.getElementById('successBanner');
+      banner.classList.add('show');
+      this.textContent = 'Account created!';
+      this.disabled = true;
+      setTimeout(function() {
+        banner.classList.remove('show');
+        document.getElementById('submitBtn').textContent = 'Create account';
+        ['usernameInput','emailInput','passwordInput'].forEach(function(id) {
+          document.getElementById(id).value = '';
+        });
+        resetField(document.getElementById('usernameInput'), document.getElementById('usernameIcon'), document.getElementById('usernameHint'), '3–16 characters, letters and numbers only');
+        resetField(document.getElementById('emailInput'),    document.getElementById('emailIcon'),    document.getElementById('emailHint'),    'Must be a valid email format');
+        resetField(document.getElementById('passwordInput'), document.getElementById('passwordIcon'), document.getElementById('passwordHint'), 'Min 8 chars · one uppercase · one number · one symbol');
+        states = { username: false, email: false, password: false };
+        ['rule-uname','rule-email','rule-len','rule-upper','rule-num','rule-sym'].forEach(function(id) { setRule(id, null); });
+        document.getElementById('submitBtn').disabled = true;
+      }, 3000);
+    });
+
+    // ── Copy code ─────────────────────────────────────────
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      var code = `// Helper: set field state
+function setField(inputEl, iconEl, hintEl, valid, msg) {
+  inputEl.className = 'form-input ' + (valid ? 'valid' : 'invalid');
+  iconEl.textContent = valid ? '✓' : '✕';
+  iconEl.style.color = valid ? '#0F6E56' : '#B91C1C';
+  hintEl.textContent = msg;
+  hintEl.className = 'hint ' + (valid ? 'success' : 'error');
+}
+
+// Username validation
+function validateUsername(v) {
+  v = v.trim();
+  if (!v)            return { ok: false, msg: 'Username cannot be empty' };
+  if (v.length < 3)  return { ok: false, msg: 'At least 3 characters required' };
+  if (v.length > 16) return { ok: false, msg: 'Maximum 16 characters allowed' };
+  if (!/^[a-zA-Z0-9]+$/.test(v)) return { ok: false, msg: 'Letters and numbers only' };
+  return { ok: true, msg: 'Username looks good!' };
+}
+
+// Email validation
+function validateEmail(v) {
+  v = v.trim();
+  if (!v) return { ok: false, msg: 'Email cannot be empty' };
+  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v)) return { ok: false, msg: 'Enter a valid email address' };
+  return { ok: true, msg: 'Valid email address!' };
+}
+
+// Password validation
+function validatePassword(v) {
+  if (!v) return { ok: false, msg: 'Password cannot be empty' };
+  if (v.length < 8)        return { ok: false, msg: 'At least 8 characters required' };
+  if (!/[A-Z]/.test(v))    return { ok: false, msg: 'Add at least one uppercase letter' };
+  if (!/[0-9]/.test(v))    return { ok: false, msg: 'Add at least one number' };
+  if (!/[^A-Za-z0-9]/.test(v)) return { ok: false, msg: 'Add at least one special character' };
+  return { ok: true, msg: 'Strong password!' };
+}
+
+// Wire up event listeners
+document.getElementById('usernameInput').addEventListener('input', function() {
+  var result = validateUsername(this.value);
+  setField(this, usernameIcon, usernameHint, result.ok, result.msg);
+});
+
+document.getElementById('emailInput').addEventListener('input', function() {
+  var result = validateEmail(this.value);
+  setField(this, emailIcon, emailHint, result.ok, result.msg);
+});
+
+document.getElementById('passwordInput').addEventListener('input', function() {
+  var result = validatePassword(this.value);
+  setField(this, passwordIcon, passwordHint, result.ok, result.msg);
+});`;
+      navigator.clipboard.writeText(code).then(function() {
+        var btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(function() {
+          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="4.5" y="1" width="7.5" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="3.5" width="7.5" height="9" rx="1.5" fill="#1E2333" stroke="currentColor" stroke-width="1.2"/></svg> Copy';
+        }, 2000);
+      });
+    });
+  </script>
+
+</body>
+</html>
